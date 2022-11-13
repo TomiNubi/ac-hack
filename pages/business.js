@@ -66,13 +66,15 @@ export default class business extends Component {
             const qrScanner = new QrScanner(
                 this.videoElem.current,
                 (result) => 
-                {   console.log('decoded qr code:', result)
-                    this.setState({qrCode : result},  () => {
-                    this.getUser(this.state.qrCode)
+                { console.log('decoded qr code:', result)
+                    this.setState({qrCode : result},  
+                        () => {
+                    //this.getUser(this.state.qrCode)
                     this.setState({pointsUpload: true})
                     this.setState({scannerOn: false})
                     qrScanner.stop();
-                })},
+                }
+                )},
                 { highlightScanRegion : true },
             );
 

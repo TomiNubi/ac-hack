@@ -104,34 +104,63 @@ export default class business extends Component {
         //update the points of the user
         var points = 0
         var totalBottles = 0
-        var pointsUrl = `users/customer/${this.state.qrCode}/points`
+        var pointsUrl = `users/customer/${this.state.qrCode}/`
         var businessBottlesUrl = `users/business/${this.state.user.uid}/totalBottles`
         const noOfBottles = this.state.noOfBottles
-        const pointsPerBottle = this.state.pointsPerBottle
+        const pointsPerBottle = 5
 
         const customerRef = ref(db, pointsUrl);
+
+
+        console.log("About to update")
+        // get(child(ref(db), pointsUrl)).then((snapshot) => {
+        //     console.log( "Snapshot val " + snapshot.val())
+        //     points = snapshot.val().points? snapshot.val().points : 0;
+        //     const updates  = {}
+
+        //     if (method == "add"){
+        //         updates[pointsUrl] = points += noOfBottles * pointsPerBottle;
+        //     //  updates[businessBottlesUrl]  =  totalBottles += 1
+        //     }
+        //     else if (method == "remove") {
+        //         updates[pointsUrl] =  10;
+        //     }
+
+        
+        
+        // }).then(() =>{
+         
+           
+            
+        // } ).catch((e) => console.error(e))
+    
+
         onValue(customerRef, (snapshot) => {
-           points = snapshot.val()
+           points = snapshot.val() ? snapshot.val() : 0
            console.log(points);
-        })
 
-        const businessRef = ref(db, businessBottlesUrl);
-        onValue(businessRef, (snapshot) => {
-           totalBottles = snapshot.val()
-        })
+           const updates  = {}
 
-        const updates  = {}
+            if (method == "add"){
+                updates[pointsUrl] = points += noOfBottles * 5;
+            //  updates[businessBottlesUrl]  =  totalBottles += 1
+            }
+            else if (method == "remove") {
+                updates[pointsUrl] = points -= 10;
+            }
 
-        if (method == "add"){
-            updates[pointsUrl] = points += noOfBottles * pointsPerBottle;
-            updates[businessBottlesUrl]  =  totalBottles += 1
-        }
-        else if (method == "remove") {
-            updates[pointsUrl] = points -= 10;
-        }
+        
+            return update(ref(db), updates)     
 
-       
-        return update(ref(db), updates)
+
+         })
+
+        // const businessRef = ref(db, businessBottlesUrl);
+        // onValue(businessRef, (snapshot) => {
+        //    totalBottles = snapshot.val()? snapshot.val() :0
+        // })
+
+        
 
     }
 
@@ -166,7 +195,7 @@ export default class business extends Component {
                         Number of points:
                         <input type="text" name="name" onChange={this.handleAddPoints}/>
                     </label>
-                    <input type="submit" value="Submit" onClick={this.updatePoints("add")} />
+                    <input type="submit" value="Submit" onClick={() => this.updatePoints("add")} />
                 </form> :<></>
             }
         

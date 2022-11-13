@@ -40,7 +40,7 @@ export default class business extends Component {
         const userRef = ref(db, `users/customer/${uid}/`);
         onValue(userRef, (snapshot) => {
             this.setState({customerVal: snapshot.exists()? snapshot.val(): {}})
-            
+            console.log(snapshot.val())
         })
     }
 
@@ -59,39 +59,38 @@ export default class business extends Component {
 
     scan = () => {
     
-        this.setState({scannerOn: true})
-        if (QrScanner.hasCamera()){
-            const qrScanner = new QrScanner(
-                this.videoElem.current, 
-                (result) => {
-                    console.log('decoded qr code:', result);
-                }
-             
-
-                //     this.setState({qrCode : result},  
-                //         () => {
-                //     //this.getUser(this.state.qrCode)
-                //     //this.setState({pointsUpload: true})
-                //   //  this.setState({scannerOn: false})
-                //     // qrScanner.stop();
-                // }
-                // )
-            
-            ,
-                { highlightScanRegion : true },
-            );
-
-            qrScanner.start();  
-            
-        }
-        else {
-            console.log("No camera")
-        }
+        this.setState({scannerOn: true}, () => {
+            if (QrScanner.hasCamera()){
+                const qrScanner = new QrScanner(
+                    this.videoElem.current, 
+                    (result) => {
+                        console.log('decoded qr code:', result);
+                        this.setState({qrCode : result.data},  
+                            () => {
+                            console.log(this.state.qrCode)
+                            this.getUser(this.state.qrCode)
+                            this.setState({pointsUpload: true})
+                            this.setState({scannerOn: false})
+                           qrScanner.stop();
+                   }
+                    )
+                    }
+                 
+    
+                
+                ,
+                    { highlightScanRegion : true },
+                );
+    
+                qrScanner.start();  
+                
+            }
+            else {
+                console.log("No camera")
+            }
+        })
         
-       
-       // text field:
-       // user: user.name
-       // points
+        
 
     }
 
@@ -99,7 +98,7 @@ export default class business extends Component {
         this.setState({noOfBottles : e.target.value})
     }
 
-    addBottles = () => {
+    updatePoints = (method) => {
         //get the qr code
         //update the points of the user
         var points = 0
@@ -120,10 +119,16 @@ export default class business extends Component {
         })
 
         const updates  = {}
-        updates[pointsUrl] = points += noOfBottles * pointsPerBottle;
-        updates[businessBottlesUrl]  =  totalBottles += 1
 
+        if (method == "add"){
+            updates[pointsUrl] = points += noOfBottles * pointsPerBottle;
+            updates[businessBottlesUrl]  =  totalBottles += 1
+        }
+        else if (method == "remove") {
+            updates[pointsUrl] = points -= 10;
+        }
 
+       
         return update(ref(db), updates)
 
     }
@@ -131,10 +136,6 @@ export default class business extends Component {
 
     
   render() {
-    const previewStyle = {
-        height: 240,
-        width: 320,
-      }
     return (
         
       <div>
@@ -157,17 +158,17 @@ export default class business extends Component {
             {this.state.pointsUpload? 
                 <form>
                     <label>
-                        User
+                        User 
                     </label>
                     <label>
                         Number of points:
                         <input type="text" name="name" onChange={this.addBottlePoints}/>
                     </label>
-                    <input type="submit" value="Submit" onClick={this.addBottles} />
+                    <input type="submit" value="Submit" onClick={this.updatePoints} />
                 </form> :<></>
             }
 
-            <p>{this.state.qrCode? this.state.qrCode : ""}</p>
+            <p>{this.state.qrCode}</p>
         
         <button>Apply voucher</button>
         </div>

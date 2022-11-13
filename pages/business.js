@@ -184,7 +184,7 @@ export default class business extends Component {
         
         <button  onClick={this.scan}>Collect bottles</button>
             {this.state.pointsUpload? 
-                <form>
+                <div>
                     <label>
                         User 
                     </label>
@@ -192,8 +192,8 @@ export default class business extends Component {
                         Number of points:
                         <input type="text" name="name" onChange={this.handleAddPoints}/>
                     </label>
-                    <input type="submit" value="Submit" onClick={() => this.updatePoints("add")} />
-                </form> :<></>
+                    <button onClick={() => this.updatePoints("add")} > Add Points </button>
+                </div> :<></>
             }
         
         <button>Apply voucher</button>

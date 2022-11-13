@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import QrReader from 'react-qr-scanner'
+import QrReader from 'react-qr-reader'
 import {ref, onValue} from "firebase/database";
 import {db, auth, app} from "../firebase-config"
 import {onAuthStateChanged } from "firebase/auth";
@@ -57,7 +57,7 @@ export default class business extends Component {
         var userId = this.state.user.userID
     }
 
-    scan = async (result) => {
+    scan = (result) => {
         this.setState({qrCode : result},  () => {
             this.getUser(this.state.qrCode)
             this.setState({pointsUpload: true})
@@ -115,11 +115,18 @@ export default class business extends Component {
         {this.state.loading? <></> :
              <div>
         {this.state.scannerOn? 
-        <QrReader
-            delay={this.state.delay}
-            style={previewStyle}
-            onError={(err) => console.error(err)}
-            onScan={this.scan}
+        // <QrReader
+        //     delay={this.state.delay}
+        //     style={previewStyle}
+        //     onError={(err) => console.error(err)}
+        //     onScan={this.scan}
+        // />
+
+            <QrReader
+                onResult={(result, error) => {
+                     this.scan(result)
+                }}
+                style={{ width: '100%' }}
         />
           : <></>
          

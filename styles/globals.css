@@ -24,3 +24,20 @@ a {
     background: black;
   }
 }
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.container {
+  max-width: 400px;
+  margin: 30px auto;
+  min-height: 300px;
+  padding: 30px;
+  background-color:beige;
+  border-radius: 100px;
+  box-shadow: 0px 2px 2px rgb(186, 186, 186) ;
+}

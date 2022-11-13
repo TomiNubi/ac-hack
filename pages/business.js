@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 //import QrReader from 'react-qr-reader'
 import QrScanner from 'qr-scanner'; // if installed via package and bundling with a module bundler like webpack or rollup
-import {ref, onValue} from "firebase/database";
+import {ref, onValue, update} from "firebase/database";
 import {db, auth, app} from "../firebase-config"
 import {onAuthStateChanged } from "firebase/auth";
 
@@ -111,6 +111,7 @@ export default class business extends Component {
         const customerRef = ref(db, pointsUrl);
         onValue(customerRef, (snapshot) => {
            points = snapshot.val()
+           console.log(points);
         })
 
         const businessRef = ref(db, businessBottlesUrl);
@@ -164,11 +165,9 @@ export default class business extends Component {
                         Number of points:
                         <input type="text" name="name" onChange={this.handleAddPoints}/>
                     </label>
-                    <input type="submit" value="Submit" onClick={this.updatePoints} />
+                    <input type="submit" value="Submit" onClick={this.updatePoints("add")} />
                 </form> :<></>
             }
-
-            <p>{this.state.qrCode}</p>
         
         <button>Apply voucher</button>
         </div>

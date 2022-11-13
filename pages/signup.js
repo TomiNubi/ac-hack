@@ -2,24 +2,26 @@ import React, { Component } from 'react'
 import { ref, set } from "firebase/database";
 import { createUserWithEmailAndPassword, getAuth, onAuthStateChanged } from "firebase/auth";
 import {db, auth, app} from "../firebase-config"
+import { emailCheck } from '../Backend/email checker';
 
 export default class Signup extends Component {
 
     constructor(props){
         super(props);
         this.state = {userProfile: {
-            'email' : 'user5@sample.com',
+            'email' : 'user7@sample.com',
             'password' : 'samplepassword',
-            'type' : 'customer',
+            'type' : 'business',
             'points' : 0,
-            'recycles' : [],
-            'QR code': 'sample stuff'
+            'QR code': 'sample stuff',
 
-        }, auth : auth, db: db};
+        }, auth : auth, db: db, count: 10};
     }
+
 
     initialiseUserProfile = (user, profile) => {
         console.log("initialise profile called")
+        
         set(ref(this.state.db, `users/${profile.type}/${user.uid}/`) , this.state.userProfile).then(() => {
             console.log("Updated profile")
         }).catch((e) => console.error(e))
@@ -30,7 +32,7 @@ export default class Signup extends Component {
         const email = this.state.userProfile.email;
         const password = this.state.userProfile.password;
         const profile = this.state.userProfile;
-       // this.verifyEmailAndPassword(email, password);
+        emailCheck(email)
         createUserWithEmailAndPassword(this.state.auth, email, password)
             .then((userCredential) => {
                 const user = userCredential.user;
@@ -45,12 +47,21 @@ export default class Signup extends Component {
             });
     }   
 
+    increaseCount = () => {
+        this.setState({count: this.state.count + 1})
+        console.log(this.state.count)
+    }
+
   render() {
     return (
       <div>
         
         <button onClick={this.signUpWithEmailAndPassword}>
             signup
+        </button>
+
+        <button onClick={this.increaseCount}>
+            increaseCount
         </button>
       </div>
     )

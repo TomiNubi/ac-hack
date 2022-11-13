@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
-import QrReader from 'react-qr-reader'
+//import QrReader from 'react-qr-reader'
+import QrScanner from 'qr-scanner'; // if installed via package and bundling with a module bundler like webpack or rollup
 import {ref, onValue} from "firebase/database";
 import {db, auth, app} from "../firebase-config"
 import {onAuthStateChanged } from "firebase/auth";
@@ -7,9 +8,10 @@ import {onAuthStateChanged } from "firebase/auth";
 export default class business extends Component {
     constructor(props){
         super(props)
+        this.videoElem = React.createRef();
         this.state = {
             user : "", 
-            scannerOn : false, 
+            scannerOn : true, 
             pointsUpload: false, 
             delay: 100, 
             loading: true,
@@ -57,12 +59,28 @@ export default class business extends Component {
         var userId = this.state.user.userID
     }
 
-    scan = (result) => {
-        this.setState({qrCode : result},  () => {
-            this.getUser(this.state.qrCode)
-            this.setState({pointsUpload: true})
-        });
+    scan = () => {
+    
+        if (QrScanner.hasCamera()){
+            const qrScanner = new QrScanner(
+                this.videoElem.current,
+                result => 
+                {console.log('decoded qr code:', result)
+                this.setState({qrCode : result},  () => {
+                    this.getUser(this.state.qrCode)
+                    this.setState({pointsUpload: true})
+                });},
+                { /* your options or returnDetailedScanResult: true if you're not specifying any other options */ },
+            );
+
+            
+            
+        }
+        else {
+            console.log("No camera")
+        }
         
+       
        // text field:
        // user: user.name
        // points
@@ -122,17 +140,12 @@ export default class business extends Component {
         //     onScan={this.scan}
         // />
 
-            <QrReader
-                onResult={(result, error) => {
-                     this.scan(result)
-                }}
-                style={{ width: '100%' }}
-        />
+           <video ref={this.videoElem}></video>
           : <></>
          
          }
         
-        <button  onClick={() => this.getCustPoint("add")}>Collect bottles</button>
+        <button  onClick={this.scan}>Collect bottles</button>
             {this.state.pointsUpload? 
                 <form>
                     <label>

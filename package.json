@@ -8,7 +8,7 @@
   },
   "scripts": {
     "dev": "next dev",
-    "build": "next build && npm install --legacy-peer-deps && npm run dev",
+    "build": "next build && npm install && npm run dev",
     "start": "next start",
     "lint": "next lint"
   },

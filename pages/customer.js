@@ -14,19 +14,30 @@ export default class Customer extends Component {
     componentDidMount(){
         onAuthStateChanged(this.state.auth, (user) => {
             this.setState({user: user}, () => {
-                this.setState({loading: false});
+                
                 if (user){
                     this.setState({user: user})
-                    const userRef = ref(db, `users/customers/${user.uid}/`);
+                   
+                    const userRef = ref(db, `users/customer/${user.uid}/`);
                     onValue(userRef, (snapshot) => {
-                        this.setState({userValues: snapshot.exists()? snapshot.val(): {}})
+                        this.setState({userValues: snapshot.exists()? snapshot.val(): {}}, () => {this.setState({loading: false});})
                     })
+                
                 }
             });
     
             this.forceUpdate()
     }
     )
+    }
+
+    logout = () => {
+        signOut(this.state.auth).then(() => {
+            //this.setState({user: this.state.auth.currentUser})
+            console.log("signed out")
+          }).catch((error) => {
+            console.error(error)
+          });
     }
 
 
@@ -39,7 +50,7 @@ export default class Customer extends Component {
         <div>
         <QRCode
             size={256}
-            style={{ height: "auto", maxWidth: "100%", width: "100%" }}
+            style={{ height: "auto", maxWidth: "100%", width: "20%" }}
             value={this.state.user.uid}
             viewBox={`0 0 256 256`}
             />

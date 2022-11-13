@@ -60,7 +60,7 @@ export default class business extends Component {
     scan = async (result) => {
         this.setState({qrCode : result},  () => {
             this.getUser(this.state.qrCode)
-            this.setState({scannerOn: false, pointsUpload: true})
+            this.setState({pointsUpload: true})
         });
         
        // text field:

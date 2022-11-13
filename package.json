@@ -8,9 +8,10 @@
   },
   "scripts": {
     "dev": "next dev",
-    "build": "next build && npm install && npm run dev",
+    "build": "next build ",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "heroku-postbuild": "npm run build"
   },
   "dependencies": {
     "@babel/runtime": "^7.20.1",

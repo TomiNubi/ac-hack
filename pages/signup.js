@@ -21,18 +21,22 @@ export default class Signup extends Component {
 
     initialiseUserProfile = (user, profile) => {
         console.log("initialise profile called")
+        profile = {
+            'name': this.state.name,
+            'points' : 0
+        }
         
-        set(ref(this.state.db, `users/${profile.type}/${user.uid}/`) , this.state.userProfile).then(() => {
+        set(ref(this.state.db, `users/${this.state.type}/${user.uid}/`) , profile).then(() => {
             console.log("Updated profile")
         }).catch((e) => console.error(e))
 
     }
 
     signUpWithEmailAndPassword = () => {
-        const email = this.state.userProfile.email;
-        const password = this.state.userProfile.password;
+        const email = this.state.email;
+        const password = this.state.password;
         const profile = this.state.userProfile;
-        emailCheck(email)
+      //  emailCheck(email)
         createUserWithEmailAndPassword(this.state.auth, email, password)
             .then((userCredential) => {
                 const user = userCredential.user;
@@ -52,9 +56,49 @@ export default class Signup extends Component {
         console.log(this.state.count)
     }
 
+    setEmail = (e) => {
+
+        this.setState({email : e.target.value})
+  
+      }
+  
+      setPassword = (e) => {
+  
+        this.setState({password:e.target.value})
+      }
+
+      setName = (e) => {
+  
+        this.setState({name:e.target.value})
+  
+      }
+      
+      setType = (e) => {
+  
+        this.setState({type:e.target.value})
+  
+      }
+
   render() {
     return (
       <div>
+
+        <form class="cream" action="home">
+        <input type="text" class="form_input" name="name" onChange={this.setName} autofocus placeholder='Name'/><br/><br/>
+            <input type="text" class="form_input" name="username" onChange={this.setEmail} autofocus placeholder='Username'/><br/><br/>
+            <input type="password" class="form_inputP" name="pword" onChange={this.setPassword} autofocus placeholder='Password' /><br/><br/>
+            <div>
+            <select onChange={this.setType} name="type">
+                <option value="customer">Customer</option>
+                <option value="business">Business</option>
+                <option value="supplier">Supplier</option>
+            </select>
+            </div>
+          
+            <p class="forgot_password">Forgot Password</p>
+            <p class="bussiness">Business</p>
+            <button class="form_submit" value="Sign In" onClick={this.signUpWithEmailAndPassword}> Sign up </button>
+      </form> 
         
         <button onClick={this.signUpWithEmailAndPassword}>
             signup

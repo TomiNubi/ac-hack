@@ -100,7 +100,13 @@ export default class Signup extends Component {
       }
 
   render() {
-    return this.state.loading? <></> : this.state.user? <div><p>Welcome </p> <Link href='/customer'> Let's go </Link></div> :
+    return this.state.loading? <></> : 
+    this.state.user? 
+    <div>
+        <p>Welcome </p> 
+        <Link href={`/${this.state.type}`}> Let's go </Link>
+    
+    </div> :
      (
       <div>
 

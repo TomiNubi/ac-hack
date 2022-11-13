@@ -39,9 +39,7 @@ export default class business extends Component {
     getUser =  (uid) => {
         const userRef = ref(db, `users/customer/${uid}/`);
         onValue(userRef, (snapshot) => {
-            this.setState({customerVal: snapshot.exists()? snapshot.val(): {}}, () => {
-                this.setState({})
-            })
+            this.setState({customerVal: snapshot.exists()? snapshot.val(): {}})
             
         })
     }
@@ -65,14 +63,14 @@ export default class business extends Component {
         if (QrScanner.hasCamera()){
             const qrScanner = new QrScanner(
                 this.videoElem.current,
-                (result) => 
-                { console.log('decoded qr code:', result)
+                result => 
+                {   console.log('decoded qr code:', result)
                     this.setState({qrCode : result},  
                         () => {
                     //this.getUser(this.state.qrCode)
-                    this.setState({pointsUpload: true})
-                    this.setState({scannerOn: false})
-                    qrScanner.stop();
+                    //this.setState({pointsUpload: true})
+                  //  this.setState({scannerOn: false})
+                    // qrScanner.stop();
                 }
                 )},
                 { highlightScanRegion : true },

@@ -61,6 +61,7 @@ export default class business extends Component {
 
     scan = () => {
     
+        this.setState({scannerOn: true})
         if (QrScanner.hasCamera()){
             const qrScanner = new QrScanner(
                 this.videoElem.current,

@@ -1,12 +1,14 @@
 import React, { Component } from 'react'
-import QrReader from 'react-qr-scanner'
-import {ref, onValue} from "firebase/database";
+//import QrReader from 'react-qr-reader'
+import QrScanner from 'qr-scanner'; // if installed via package and bundling with a module bundler like webpack or rollup
+import {ref, onValue, update} from "firebase/database";
 import {db, auth, app} from "../firebase-config"
 import {onAuthStateChanged } from "firebase/auth";
 
 export default class business extends Component {
     constructor(props){
         super(props)
+        this.videoElem = React.createRef(); 
         this.state = {
             user : "", 
             scannerOn : false, 
@@ -37,10 +39,8 @@ export default class business extends Component {
     getUser =  (uid) => {
         const userRef = ref(db, `users/customer/${uid}/`);
         onValue(userRef, (snapshot) => {
-            this.setState({customerVal: snapshot.exists()? snapshot.val(): {}}, () => {
-                this.setState({})
-            })
-            
+            this.setState({customerVal: snapshot.exists()? snapshot.val(): {}})
+            console.log(snapshot.val())
         })
     }
 
@@ -57,15 +57,40 @@ export default class business extends Component {
         var userId = this.state.user.userID
     }
 
-    scan = async (result) => {
-        this.setState({qrCode : result},  () => {
-            this.getUser(this.state.qrCode)
-            this.setState({pointsUpload: true})
-        });
+    scan = () => {
+    
+        this.setState({scannerOn: true}, () => {
+            if (QrScanner.hasCamera()){
+                const qrScanner = new QrScanner(
+                    this.videoElem.current, 
+                    (result) => {
+                        console.log('decoded qr code:', result);
+                        this.setState({qrCode : result.data},  
+                            () => {
+                            console.log(this.state.qrCode)
+                            this.getUser(this.state.qrCode)
+                            this.setState({pointsUpload: true})
+                            this.setState({scannerOn: false})
+                           qrScanner.stop();
+                   }
+                    )
+                    }
+                 
+    
+                
+                ,
+                    { highlightScanRegion : true },
+                );
+    
+                qrScanner.start();  
+                
+            }
+            else {
+                console.log("No camera")
+            }
+        })
         
-       // text field:
-       // user: user.name
-       // points
+        
 
     }
 
@@ -73,7 +98,7 @@ export default class business extends Component {
         this.setState({noOfBottles : e.target.value})
     }
 
-    addBottles = () => {
+    updatePoints = (method) => {
         //get the qr code
         //update the points of the user
         var points = 0
@@ -86,6 +111,7 @@ export default class business extends Component {
         const customerRef = ref(db, pointsUrl);
         onValue(customerRef, (snapshot) => {
            points = snapshot.val()
+           console.log(points);
         })
 
         const businessRef = ref(db, businessBottlesUrl);
@@ -94,10 +120,16 @@ export default class business extends Component {
         })
 
         const updates  = {}
-        updates[pointsUrl] = points += noOfBottles * pointsPerBottle;
-        updates[businessBottlesUrl]  =  totalBottles += 1
 
+        if (method == "add"){
+            updates[pointsUrl] = points += noOfBottles * pointsPerBottle;
+            updates[businessBottlesUrl]  =  totalBottles += 1
+        }
+        else if (method == "remove") {
+            updates[pointsUrl] = points -= 10;
+        }
 
+       
         return update(ref(db), updates)
 
     }
@@ -105,37 +137,35 @@ export default class business extends Component {
 
     
   render() {
-    const previewStyle = {
-        height: 240,
-        width: 320,
-      }
     return (
         
       <div>
         {this.state.loading? <></> :
              <div>
         {this.state.scannerOn? 
-        <QrReader
-            delay={this.state.delay}
-            style={previewStyle}
-            onError={(err) => console.error(err)}
-            onScan={this.scan}
-        />
+        // <QrReader
+        //     delay={this.state.delay}
+        //     style={previewStyle}
+        //     onError={(err) => console.error(err)}
+        //     onScan={this.scan}
+        // />
+
+           <video ref={this.videoElem}></video>
           : <></>
          
          }
         
-        <button  onClick={() => this.getCustPoint("add")}>Collect bottles</button>
+        <button  onClick={this.scan}>Collect bottles</button>
             {this.state.pointsUpload? 
                 <form>
                     <label>
-                        User {this.getUser(this.state.qrCode)}
+                        User 
                     </label>
                     <label>
                         Number of points:
-                        <input type="text" name="name" onChange={this.addBottlePoints}/>
+                        <input type="text" name="name" onChange={this.handleAddPoints}/>
                     </label>
-                    <input type="submit" value="Submit" onClick={this.addBottles} />
+                    <input type="submit" value="Submit" onClick={this.updatePoints("add")} />
                 </form> :<></>
             }
         

@@ -113,47 +113,46 @@ export default class business extends Component {
 
 
         console.log("About to update")
-        // get(child(ref(db), pointsUrl)).then((snapshot) => {
-        //     console.log( "Snapshot val " + snapshot.val())
-        //     points = snapshot.val().points? snapshot.val().points : 0;
-        //     const updates  = {}
+        get(child(ref(db), pointsUrl)).then((snapshot) => {
+            console.log( "Snapshot val " + snapshot.val())
+            points = snapshot.val().points? snapshot.val().points : 0;
+            const updates  = {}
 
-        //     if (method == "add"){
-        //         updates[pointsUrl] = points += noOfBottles * pointsPerBottle;
-        //     //  updates[businessBottlesUrl]  =  totalBottles += 1
-        //     }
-        //     else if (method == "remove") {
-        //         updates[pointsUrl] =  10;
-        //     }
+            if (method == "add"){
+                updates[pointsUrl] = points += noOfBottles * pointsPerBottle;
+            }
+            else if (method == "remove") {
+                updates[pointsUrl] =  points -= 10;
+            }
 
         
         
-        // }).then(() =>{
+        }).then(() =>{
          
            
             
-        // } ).catch((e) => console.error(e))
+        } ).catch((e) => console.error(e))
     
 
-        onValue(customerRef, (snapshot) => {
-           points = snapshot.val() ? snapshot.val() : 0
-           console.log(points);
+        // onValue(customerRef, (snapshot) => {
+        //    points = snapshot.val() ? snapshot.val() : 0
+        //    console.log(points);
 
-           const updates  = {}
+        //    const updates  = {}
 
-            if (method == "add"){
-                updates[pointsUrl] = points += noOfBottles * 5;
-            //  updates[businessBottlesUrl]  =  totalBottles += 1
-            }
-            else if (method == "remove") {
-                updates[pointsUrl] = points -= 10;
-            }
+        //     if (method == "add"){
+        //         updates[pointsUrl] = points += noOfBottles * 5;
+        //     //  updates[businessBottlesUrl]  =  totalBottles += 1
+        //     }
+        //     else if (method == "remove") {
+        //         updates[pointsUrl] = points -= 10;
+        //     }
 
         
-            return update(ref(db), updates)     
+        //     return update(ref(db), updates)     
 
 
-         })
+        //  })
 
         // const businessRef = ref(db, businessBottlesUrl);
         // onValue(businessRef, (snapshot) => {

@@ -1,32 +1,48 @@
 import React, { Component } from 'react'
-import logo from "../pictures/logo.png";
+import logo from ".././pictures/./logo.png";
 
 export default class Home extends Component {
   render() {
     return (
-      <div>
-        <div class="header">
-          <img src={logo} alt="logo" width="100" height="100"/>
-          Money Tree
-        </div>
-      <div class="header">
-          <button class= "btn">Points</button>
-          <button class= "btn">Redeem</button>
-          <button class= "btn">Location</button>
-          <button class= "btn">Account</button>
-      </div>
-      <div>
-        <header>
-          <h1>
-            {"Your points..."}</h1>
-            </header>
-            <div>
-              <button onClick={() => {
-                navigate("/QR")
-              }} color= 'white'> QR Access </button>
-              </div>
-      </div>home</div>
+        <div className='contaier'>
+          <div className='header'>
+            <div className='navbar'>
+            <img src='../pictures/logo.png' alt="logo">
+            </img>
+              Company name 
+            </div>
+              <div>
+                <div className='navbar'>
+                  <a>
+                    <button className='btn'>Points</button>
+                  </a>
+                  <a>
+                    <button className='btn'>Redeem</button>
+                  </a>
+                  <a>
+                    <button className='btn'>Location</button>
+                  </a>
+                  <a>
+                    <button className='btn'>Account</button>
+                  </a>
+                </div>
+            {/* <div className='logoimg'>
+            <img className="logoimg" src={logo} alt="logo"/>
+             </div>
+            
+             <div className='companyname'>
+              Company Name
+             </div>
+             <div>
+             <button className='btn'>Points</button>
+             <button className='btn'>Points</button>
+             <button className='btn'>Points</button>
+             <button className='btn'>Points</button> */}
 
-    )
-  }
+             </div>
+
+      </div>
+      </div>
+      )
+    }
 }

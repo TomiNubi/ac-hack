@@ -73,7 +73,7 @@ export default class business extends Component {
                 { /* your options or returnDetailedScanResult: true if you're not specifying any other options */ },
             );
 
-            
+            qrScanner.start();  
             
         }
         else {

@@ -129,11 +129,7 @@ export default class business extends Component {
 
         
         
-        }).then(() =>{
-         
-           
-            
-        } ).catch((e) => console.error(e))
+        }).catch((e) => console.error(e))
     
 
         // onValue(customerRef, (snapshot) => {

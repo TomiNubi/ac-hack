@@ -162,7 +162,7 @@ export default class business extends Component {
                     </label>
                     <label>
                         Number of points:
-                        <input type="text" name="name" onChange={this.addBottlePoints}/>
+                        <input type="text" name="name" onChange={this.handleAddPoints}/>
                     </label>
                     <input type="submit" value="Submit" onClick={this.updatePoints} />
                 </form> :<></>

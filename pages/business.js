@@ -4,6 +4,7 @@ import QrScanner from 'qr-scanner'; // if installed via package and bundling wit
 import {ref, onValue, update} from "firebase/database";
 import {db, auth, app} from "../firebase-config"
 import {onAuthStateChanged } from "firebase/auth";
+import Link from 'next/link';
 
 export default class business extends Component {
     constructor(props){

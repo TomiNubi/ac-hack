@@ -56,7 +56,7 @@ export default class Login extends Component {
         <input type="checkbox" class="remember_me" name="rememberme"></input>
         <p class="remember_me_text">Remember Me</p>
         <p class="forgot_password">Forgot Password</p>
-        <p class="bussiness">Bussiness</p>
+        <p class="business">Business</p>
         <input class="form_submit" type="submit" value="Sign In"/>
       </form> 
       

@@ -8,10 +8,10 @@ import {onAuthStateChanged } from "firebase/auth";
 export default class business extends Component {
     constructor(props){
         super(props)
-        this.videoElem = React.createRef();
+        this.videoElem = React.createRef(); 
         this.state = {
             user : "", 
-            scannerOn : true, 
+            scannerOn : false, 
             pointsUpload: false, 
             delay: 100, 
             loading: true,
@@ -64,13 +64,15 @@ export default class business extends Component {
         if (QrScanner.hasCamera()){
             const qrScanner = new QrScanner(
                 this.videoElem.current,
-                result => 
-                {console.log('decoded qr code:', result)
-                this.setState({qrCode : result},  () => {
+                (result) => 
+                {   console.log('decoded qr code:', result)
+                    this.setState({qrCode : result},  () => {
                     this.getUser(this.state.qrCode)
                     this.setState({pointsUpload: true})
-                });},
-                { /* your options or returnDetailedScanResult: true if you're not specifying any other options */ },
+                    this.setState({scannerOn: false})
+                    qrScanner.stop();
+                })},
+                { highlightScanRegion : true },
             );
 
             qrScanner.start();  
@@ -158,6 +160,8 @@ export default class business extends Component {
                     <input type="submit" value="Submit" onClick={this.addBottles} />
                 </form> :<></>
             }
+
+            <p>{this.state.qrCode}</p>
         
         <button>Apply voucher</button>
         </div>

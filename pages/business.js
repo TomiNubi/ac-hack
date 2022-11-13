@@ -62,17 +62,22 @@ export default class business extends Component {
         this.setState({scannerOn: true})
         if (QrScanner.hasCamera()){
             const qrScanner = new QrScanner(
-                this.videoElem.current,
-                result => 
-                {   console.log('decoded qr code:', result)
-                    this.setState({qrCode : result},  
-                        () => {
-                    //this.getUser(this.state.qrCode)
-                    //this.setState({pointsUpload: true})
-                  //  this.setState({scannerOn: false})
-                    // qrScanner.stop();
+                this.videoElem.current, 
+                (result) => {
+                    console.log('decoded qr code:', result);
                 }
-                )},
+             
+
+                //     this.setState({qrCode : result},  
+                //         () => {
+                //     //this.getUser(this.state.qrCode)
+                //     //this.setState({pointsUpload: true})
+                //   //  this.setState({scannerOn: false})
+                //     // qrScanner.stop();
+                // }
+                // )
+            
+            ,
                 { highlightScanRegion : true },
             );
 
@@ -152,7 +157,7 @@ export default class business extends Component {
             {this.state.pointsUpload? 
                 <form>
                     <label>
-                        User {this.getUser(this.state.qrCode)}
+                        User
                     </label>
                     <label>
                         Number of points:
@@ -162,7 +167,7 @@ export default class business extends Component {
                 </form> :<></>
             }
 
-            <p>{this.state.qrCode}</p>
+            <p>{this.state.qrCode? this.state.qrCode : ""}</p>
         
         <button>Apply voucher</button>
         </div>

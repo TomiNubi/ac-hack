@@ -46,8 +46,34 @@ export default class Customer extends Component {
     return (
         
       <div>
-        {this.state.loading? <></>: 
-        <div>
+         {this.state.loading? <></>: <div>
+
+<div className='contaier'>
+          <div className='header'>
+            <div className='navbar'>
+            <img src='pictures/logo.png' width={50} height={50} alt="logo">
+            </img>
+              Company name 
+            </div>
+              <div>
+                <div className='navbar'>
+                  <a>
+                    <button className='btn'>Points</button>
+                  </a>
+                  <a>
+                    <button className='btn'>Redeem</button>
+                  </a>
+                  <a>
+                    <button className='btn'>Location</button>
+                  </a>
+                  <a>
+                    <button className='btn'>Account</button>
+                  </a>
+                </div>
+             </div>
+
+      </div>
+      <div>
         <QRCode
             size={256}
             style={{ height: "auto", maxWidth: "100%", width: "20%" }}
@@ -57,7 +83,12 @@ export default class Customer extends Component {
         <div>
             <p>Points : {this.state.userValues.points}</p>
         </div>
-      </div> }
+      </div> 
+      </div>
+
+        
+      
+      </div>} 
       </div>
     )
   }

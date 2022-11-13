@@ -72,7 +72,7 @@ form{
 }
 
 .form_submit{
-  position: relative;
+  /* position: relative; */
   top: 350px;
   margin: auto;
   color: white;

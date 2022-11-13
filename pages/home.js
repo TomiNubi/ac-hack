@@ -7,7 +7,7 @@ export default class Home extends Component {
         <div className='contaier'>
           <div className='header'>
             <div className='navbar'>
-            <img src='../pictures/logo.png' alt="logo">
+            <img src='pictures/logo.png' alt="logo">
             </img>
               Company name 
             </div>

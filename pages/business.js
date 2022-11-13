@@ -125,6 +125,8 @@ export default class business extends Component {
                 updates[pointsUrl] =  points -= 10;
             }
 
+            return update(ref(db), updates)  
+
         
         
         }).then(() =>{
